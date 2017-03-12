@@ -1,0 +1,29 @@
+---
+- name: Install pip
+  apt:
+    name: python-pip
+    state: present
+- name: Install docker-py for ansible docker module
+  pip:
+    name: docker-py
+    state: present
+- name: Create Docker network
+  command: docker network create influxdb
+  ignore_errors: yes
+- name: Create InfluxDB container
+  docker:
+    name: influxdb
+    detach: yes
+    image: influxdb:1.1.0
+    state: started
+    pull: always
+    ports:
+    - "8083:8083"
+    - "8086:8086"
+    volumes:
+    - /tmp:/var/lib/influxdb
+    net: influxdb
+- name: Create "snap" InfluxDB database
+  uri:
+    url: http://localhost:8086/query?q=CREATE%20DATABASE%20snap
+    method: POST
