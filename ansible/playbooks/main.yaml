@@ -1,0 +1,11 @@
+---
+# - hosts: localhost
+#   vars_files:
+#     - ./group_vars/all.yml
+#   roles:
+#     - { role: influx }
+#     - { role: grafana }
+- hosts: edisons
+  roles:
+    - { role: edison }
+  remote_user: root
