@@ -1,0 +1,24 @@
+- name: Make directory for edison dependencies
+  file:
+    path: /root/home/collector
+    state: directory
+- name: Copy all necessary files from python folder
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: "../python/analog.py", dest: "/root/home/collector/analog.py" }
+    - { src: "../python/config.py", dest: "/root/home/collector/config.py" }
+    - { src: "../python/example.py", dest: "/root/home/collector/example.py" }
+    - { src: "../python/main.py", dest: "/root/home/collector/main.py" }
+    - { src: "../python/SF_ADC.py", dest: "/root/home/collector/SF_ADC.py" }
+    - { src: "../python/Spark_ADC.py", dest: "/root/home/collector/Spark_ADC.py" }
+- name: Copy all necessary shell scripts
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: "../scripts/edison_setup.sh", dest: "/root/home/collector/edison_setup.sh" }
+- opkg:
+    name: python-pip
+    state: present
+- name: Install InfluxDB for analog collector
+  pip:
+    name: "influxdb"
+    state: present

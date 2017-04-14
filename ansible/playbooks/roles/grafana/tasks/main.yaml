@@ -17,21 +17,14 @@
 - name: Create docker network
   docker_network:
     name: influxdb
-- name: Create InfluxDB container
+- name: Create Grafana container
   docker_container:
-    name: influxdb
+    name: grafana
     detach: yes
-    image: influxdb:1.1.0
+    image: grafana:team9
     state: started
-    pull: true
+    pull: false
     ports:
-    - "8083:8083"
-    - "8086:8086"
-    volumes:
-    - /tmp:/var/lib/influxdb
+    - "3000:3000"
     networks:
     - name: influxdb
-- name: Create "snap" InfluxDB database
-  uri:
-    url: http://localhost:8086/query?q=CREATE%20DATABASE%20snap
-    method: POST
